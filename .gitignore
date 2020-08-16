@@ -1,0 +1,5 @@
+ai_app/node_modules
+ai_app/dist
+
+#Electron-builder output
+ai_app/dist_electron
