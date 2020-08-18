@@ -22,8 +22,6 @@
                     <v-card-subtitle v-text="text"></v-card-subtitle>
                     </div>
                     
-
-    
                     <v-avatar
                     class="ma-3"
                     size="125"
