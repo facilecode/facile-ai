@@ -1,6 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import Regression from '../views/Regression.vue'
+import Sound from '../views/Sound.vue'
+import Image from '../views/Image.vue'
+import Classification from '../views/Classification.vue'
+
 import axios from 'axios'
 
 Vue.use(VueRouter, axios)
@@ -12,12 +17,24 @@ Vue.use(VueRouter, axios)
     component: Home
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/Regression',
+    name: 'Regression',
+    view: Regression.Vue
+  },
+  {
+    path: '/Sound',
+    name: 'Sound',
+    view: Sound.Vue
+  },
+  {
+    path: '/Image',
+    name: 'Image',
+    view: Image.Vue
+  },
+  {
+    path: '/Classification',
+    name: 'Classification',
+    view: Classification.Vue
   }
 ]
 
