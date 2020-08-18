@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    classification
+    Tabular
   </div>
 </template>
 

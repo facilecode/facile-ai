@@ -1,6 +1,6 @@
 <template>
-  <div class="home">
-    regression
+  <div>
+    Regression
   </div>
 </template>
 
