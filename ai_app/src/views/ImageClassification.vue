@@ -1,6 +1,8 @@
 <template>
   <div class="home">
-    image
+    
+
+
   </div>
 </template>
 
@@ -8,6 +10,6 @@
 // @ is an alias to /src
 
 export default {
-  name: 'Image'
+  name: 'ImageClassification'
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
-  <div class="home">
-    sound
+  <div>
+    Sound
   </div>
 </template>
 

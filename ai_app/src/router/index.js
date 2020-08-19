@@ -1,10 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import Regression from '../views/Regression.vue'
-import Sound from '../views/Sound.vue'
-import Image from '../views/Image.vue'
-import Classification from '../views/Classification.vue'
+import Main from '../views/Main.vue'
 
 import axios from 'axios'
 
@@ -13,28 +9,28 @@ Vue.use(VueRouter, axios)
   const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'Main',
+    component: Main
   },
   {
-    path: '/Regression',
+    path: '/regression',
     name: 'Regression',
-    view: Regression.Vue
+    component: () => import('@/views/Regression')
   },
   {
-    path: '/Sound',
+    path: '/sound',
     name: 'Sound',
-    view: Sound.Vue
+    component: () => import('@/views/Sound')
   },
   {
-    path: '/Image',
-    name: 'Image',
-    view: Image.Vue
+    path: '/tabular',
+    name: 'Tabular',
+    component: () => import('@/views/Tabular')
   },
   {
-    path: '/Classification',
-    name: 'Classification',
-    view: Classification.Vue
+    path: '/ImageClassification',
+    name: 'ImageClassification',
+    component: () => import('@/views/ImageClassification')
   }
 ]
 
