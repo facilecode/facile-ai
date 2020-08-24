@@ -1,10 +1,15 @@
 import torch
+import torchvision
 import torch.nn as nn
 import torchvision.models as models
 import torchvision.transforms as trans
+import torch.optim as optim
+from torch.optim import lr_scheduler
+import torch.nn.functional as F
 from PIL import Image
 import cv2
 from time import sleep
+import os
 
 class Trainer:
 
@@ -27,6 +32,25 @@ class Trainer:
         "adaptivemaxpool_2d": nn.AdaptiveAvgPool2d,
         "adaptiveavgpool_2d": nn.AdaptiveAvgPool2d
     }
+    train_transforms_augm = trans.Compose([
+        trans.RandomResizedCrop(224),
+        trans.RandomHorizontalFlip(),
+        trans.ColorJitter(brightness=(0.10,0.9), contrast=(0.10,0.9)),
+        trans.ToTensor(),
+        trans.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])
+    train_transforms = trans.Compose([
+        trans.Resize(224),
+        trans.ToTensor(),
+        trans.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])
+    test_transforms = trans.Compose([
+        trans.Resize((224,224)),
+        trans.ToTensor(),
+        trans.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])
+
+
     def __init__(self):
 
         self.named_layers = {
@@ -139,7 +163,6 @@ class Trainer:
                 ), 
                 nn.Sigmoid()
             )
-            self.model.eval()
         
         if "resnet" in model_name:
             if "18" in model_name:
@@ -185,6 +208,10 @@ class Trainer:
 
         if "inception" in model_name and "v3" in model_name:
             self.model = models.inception_v3(pretrained=pretrained)
+            self.model.AuxLogits.fc = nn.Linear(
+                in_features=768,
+                out_features=output_dim
+            )
             self.model.fc = nn.Linear(
                 in_features = self.model.fc.in_features, 
                 out_features = output_dim)
@@ -255,15 +282,43 @@ class Trainer:
             trans.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ])
 
+    # optimizers
+    def init_optim(self, optim_name, parameters, lr, fine_tune):
+        pass
     # dataset
     def load_dataset(self, dataset_path):
         pass
     # train
-    def train(self, dataset_path, epoch, fine_tune, gpu):
+    def train(self, dataset_path, data_augm, epoch, fine_tune, optimizer_name, loss_name, lr, gpu):
+
         self.classes = os.listdir(dataset_path)
         self.classes_num = len(self.classes)
 
-        pass
+        if data_augm == True:
+            transform = self.train_transforms_augm
+        else:
+            transform = self.train_transforms
+        
+        # to-do : separate dataset into train/val
+
+        trainset = torchvision.datasets.ImageFolder(
+            root=dataset_path + '/train', transform=transform)
+        trainloader = torch.utils.data.DataLoader(trainset, batch_size=8,
+                                                shuffle=True, num_workers=8)
+        testset = torchvision.datasets.ImageFolder(
+            root=dataset_path + '/val', transform=transform)
+        testloader = torch.utils.data.DataLoader(testset, batch_size=8,
+                                                shuffle=False, num_workers=8)
+        dataloaders_dict = {
+            'train': trainloader,
+            'val': testloader
+        }
+
+        self.build_from_model("mobilenet v2", pretrained=True, output_dim=self.classes_num)
+
+        #to-do : optimizers ...
+        optimizer = self.init_optim()
+
     # predict on image from image_path
     def predict(self, image_path):
         im = cv2.imread(image_path)
@@ -279,3 +334,4 @@ class Trainer:
 
 
 t = Trainer()   
+t.train("dataset", data_augm=True, epoch=5, fine_tune=True, optimizer_name="SGD", loss_name="x_entropy", lr = 0.001, gpu=False)
