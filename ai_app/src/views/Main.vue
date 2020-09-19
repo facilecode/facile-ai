@@ -1,35 +1,13 @@
 
 <template>
     <v-container>
-        <v-row dense>
-
-        <v-col cols="12" >
-            <v-card
-            color='#952175'
-            dark
-            >
-
-            <div class="d-flex flex-no-wrap justify-space-between">
-                <div>
-                <v-card-title
-                    class="headline"
-                    v-text="title"
-                ></v-card-title>
-
-                <v-card-subtitle v-text="text"></v-card-subtitle>
-                </div>
-                
-                <v-avatar
-                    class="ma-3"
-                    size="125"
-                    tile
-                >
-                 <v-img :src="require('../assets/tf.png')"></v-img>
-                
-                </v-avatar>
-            </div>
-            </v-card>
-        </v-col>
+        <v-toolbar color='' dark height="100">
+      <v-toolbar-title>Image classification</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-avatar tile size="70">
+        <img src="@/assets/tf.png" alt="alt">
+      </v-avatar>
+    </v-toolbar>
 
         <v-row justify="space-around">
         
@@ -69,8 +47,6 @@
 
             </v-card>
         </v-col>   
-        </v-row>
-
         </v-row>
     </v-container>
 </template>
